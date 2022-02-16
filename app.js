@@ -2,11 +2,21 @@ const express = require('express');
 const app = express();
 const morgan = require('morgan'); // middleware for request logging
 const bodyParser = require('body-parser'); // used to parse body text into a JSON object.
+const mongoose = require('mongoose'); // MongoDB connection driver
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 
-// middleware piping
+// WILL NEED TO BE CHANGED FOR SQL ============
+mongoose.connect("mongodb+srv://alanas:"+ process.env.MONGO_ATLAS_PW +"@cloudscholar-db.tt9k7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    {
+        //useMongoClient: true
+    }
+);
+// ================================================================================
+
+
+// middleware piping =====================================================
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
