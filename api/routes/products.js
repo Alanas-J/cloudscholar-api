@@ -11,11 +11,25 @@ router.get('/', (req, res, next) => {
 
         // You can set a limit somehow instead of query all for pagination
     Product.find()
+        .select('name price _id') // used to select specific fields
         .exec()
         .then(docs => {
-            console.log(docs);
+            const response = {
+                count: docs.length,
+                products: docs.map(doc => {
+                    return {
+                        ...doc._doc,
+                        request: {
+                            type: "GET",
+                            url: "http://localhost:8086/"+doc._id
+                        }
+                    }
+                })
+            };
 
-            res.status(200).json(docs);
+            console.log(response);
+
+            res.status(200).json(response);
         })
         .catch(err => {
             console.log(err);
@@ -27,6 +41,7 @@ router.get('/:productID', (req, res, next) => {
 
     //Querying mongoDB ========
     Product.findById(id)
+        .select('name price _id')
         .exec()
         .then(doc => {
             if(doc){
@@ -57,7 +72,15 @@ router.post('/', (req, res, next) => {
         console.log(result);
         res.status(201).json({
             message: 'Handling POST Request to /products.',
-            createdProduct: product
+            createdProduct: {
+                _id: result._id,
+                name: result.name,
+                price: result.price,
+                request: {
+                    type: "GET",
+                    url: "http://localhost:8086/"+result._id
+                }
+            }
         });
     })
     .catch(err => {
