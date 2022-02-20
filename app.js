@@ -6,6 +6,7 @@ const mongoose = require('mongoose'); // MongoDB connection driver
 
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user')
 
 // WILL NEED TO BE CHANGED FOR SQL ============
 mongoose.connect("mongodb+srv://alanas:"+ process.env.MONGO_ATLAS_PW +"@cloudscholar-db.tt9k7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
@@ -40,6 +41,7 @@ app.use((req, res, next) => {
 // Route Handing =============================================
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 // Catches all other routes
 app.use((req, res, next) => {
