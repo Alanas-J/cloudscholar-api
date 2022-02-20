@@ -5,13 +5,34 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Product = require('../models/product');
 
+// File storage
+const multer = require('multer'); // used to parse formdata requests, bodyparser doesnt provie this function
+const e = require('express');
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './uploads/');
+    },
+    filename: (req, file, cb) => {
+        cb(null, new Date().toISOString()+""+file.originalname)
+    }
+});
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' ){
+        cb(null, true);
+    }
+    else{
+        cb(null, false); // decline file
+    }
+}
+const upload = multer({storage: storage, limits: {fileSize: 1024*1024*5}, fileFilter: fileFilter}); // used to store files in this dest
+
 
 // Get Products
 router.get('/', (req, res, next) => {
 
         // You can set a limit somehow instead of query all for pagination
     Product.find()
-        .select('name price _id') // used to select specific fields
+        .select('productImage name price _id') // used to select specific fields
         .exec()
         .then(docs => {
             const response = {
@@ -41,7 +62,7 @@ router.get('/:productID', (req, res, next) => {
 
     //Querying mongoDB ========
     Product.findById(id)
-        .select('name price _id')
+        .select('productImage name price _id')
         .exec()
         .then(doc => {
             if(doc){
@@ -60,11 +81,14 @@ router.get('/:productID', (req, res, next) => {
 
 
 // POST
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('productImage'),(req, res, next) => {
+    console.log(req.file);
+
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        productImage: req.file.path
     });
 
     // used to save to the DB.

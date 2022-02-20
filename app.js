@@ -18,6 +18,7 @@ mongoose.connect("mongodb+srv://alanas:"+ process.env.MONGO_ATLAS_PW +"@cloudsch
 
 // middleware piping =====================================================
 app.use(morgan('dev'));
+// app.use(express.static('/uploads', 'uploads')); to enable static dirs
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
