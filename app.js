@@ -4,6 +4,9 @@ const morgan = require('morgan'); // middleware for request logging
 const bodyParser = require('body-parser'); // used to parse body text into a JSON object.
 const mongoose = require('mongoose'); // MongoDB connection driver
 
+const {Sequelize} = require('sequelize');
+const sequelize = new Sequelize('postgres://postgres:password@127.0.0.1:5432/public')
+
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/user')
@@ -15,6 +18,8 @@ mongoose.connect("mongodb+srv://alanas:"+ process.env.MONGO_ATLAS_PW +"@cloudsch
     }
 );
 // ================================================================================
+
+
 
 
 // middleware piping =====================================================

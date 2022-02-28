@@ -1,7 +1,6 @@
 - Login, post user, get token.
 post /login
 
-
 - Get all table data by ID
 get /user_data:no
 
