@@ -1,7 +1,15 @@
--- DROP TABLE IF EXISTS contacts;
+-- Is used to comment
+
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS subject;
+DROP TABLE IF EXISTS class;
+DROP TABLE IF EXISTS task;
+DROP TABLE IF EXISTS shortcut_link;
+
 
 CREATE TABLE user (
     user_id SERIAL PRIMARY KEY,
+
     email varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
 );
@@ -51,8 +59,11 @@ CREATE TABLE task (
 
 
 CREATE TABLE shortcut_link (
-    ID SERIAL,
-    name varchar(255),
-    url varchar(255),
-    userID int NOT NULL
+    shortcut_link_id SERIAL PRIMARY KEY,
+    user_id INT,
+
+    name VARCHAR(255),
+    url VARCHAR(255),
+
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFFERENCES user(user_id)
 );
