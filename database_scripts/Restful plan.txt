@@ -1,0 +1,20 @@
+- Login, post user, get token.
+post /login
+
+
+- Get all table data by ID
+get /user_data:no
+
+post /user_data:no 
+    --will need to delete and recreate database records
+
+-- future ===================
+get /userdata/note/all
+get /user_data/note:no
+post /userdata/note:no
+delete /userdata/note:no
+
+-- Unnecessary ================
+
+-- delete user and data
+
