@@ -9,7 +9,7 @@ DROP TABLE IF EXISTS cloudscholar_user;
 CREATE TABLE cloudscholar_user (
     user_id SERIAL PRIMARY KEY,
 
-    email varchar(255) NOT NULL,
+    email varchar(255) NOT NULL UNIQUE,
     password varchar(255) NOT NULL
 );
 
@@ -23,7 +23,6 @@ CREATE TABLE cloudscholar_subject (
     colour VARCHAR(255),
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    description VARCHAR(512),
 
     CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES cloudscholar_user(user_id)
 );
