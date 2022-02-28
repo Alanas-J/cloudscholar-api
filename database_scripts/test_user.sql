@@ -10,14 +10,14 @@
 
 
 -- Adding the sole test user for now.
-insert into cloudscholar_user (email, password) values ('bob@mail.com', password);
+insert into cloudscholar_user (email, password) values ('bob@mail.com', 'password');
 
 -- Adding the subjects
 insert into cloudscholar_subject (user_id, name, colour, start_date, end_date) 
     values ((select user_id from cloudscholar_user where email='bob@mail.com'),
     'Fourth Year P Testing', '#550055', '2022-1-1', '2022-6-1');
 insert into cloudscholar_subject (user_id, name, colour, start_date, end_date) 
-    values (select user_id from cloudscholar_user where email='bob@mail.com'),
+    values ((select user_id from cloudscholar_user where email='bob@mail.com'),
     'Fourth Year P Testing 2', '#005555', '2022-1-1', '2022-6-1');
 
 -- Adding Classes
