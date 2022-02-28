@@ -1,58 +1,58 @@
+-- DROP TABLE IF EXISTS contacts;
+
 CREATE TABLE user (
-    ID int,
-    email varchar(255),
-    password varchar(255)
+    user_id SERIAL PRIMARY KEY,
+    email varchar(255) NOT NULL,
+    password varchar(255) NOT NULL,
 );
+
 
 CREATE TABLE subject (
-    ID SERIAL PRIMARY KEY,
+    subject_id SERIAL PRIMARY KEY,
+    user_id INT,
+
+    user_id int NOT NULL,
     day int,
-    name varchar(255),
+    name varchar(255) NOT NULL,
     colour varchar(255),
-    start_date varchar(255),
-    end_date varchar(255),
+    start_date varchar(255) NOT NULL,
+    end_date varchar(255) NOT NULL,
     description varchar(512),
-    userID int
+
+    CONSTRAINT fk_user FOREIGN KEY(user_id) REFFERENCES user(user_id)
 );
+
 
 CREATE TABLE class (
-    ID int,
-    day int,
-    type varchar(255),
-    location varchar(255),
-    start_time, varchar(255),
-    end_time varchar(255),
-    description varchar(512),
-    subjectID int
+    class_id SERIAL PRIMARY KEY,
+    subject_id INT NOT NULL,
+
+    day INT,
+    type VARCHAR(255),
+    location VARCHAR(255),
+    start_time VARCHAR(255),
+    end_time VARCHAR(255),
+    description VARCHAR(512),
+
+    CONSTRAINT fk_subject FOREIGN KEY(subject_id) REFFERENCES user(subject_id)
 );
+
 
 CREATE TABLE task (
-    ID int,
-    name varchar(255),
-    due_datetime varchar(255),
-    description varchar(512),
-    subjectID int
+    task_id SERIAL PRIMARY KEY,
+    subject_id INT,
+
+    name VARCHAR(255),
+    due_datetime VARCHAR(255),
+    description VARCHAR(512),
+
+    CONSTRAINT fk_subject FOREIGN KEY(subject_id) REFFERENCES user(subject_id)
 );
+
 
 CREATE TABLE shortcut_link (
-    ID int,
+    ID SERIAL,
     name varchar(255),
     url varchar(255),
-    userID int
+    userID int NOT NULL
 );
-
-
-
-
-
-
-    - Subject Table: name, colour hex, start and end date. userID
-        
-        - Class: day, type, location, start time, end time, description. subjectFK
-
-        - Task: due_datetime, name, description, subjectFK(0-1)
-
-    - shortcut_links: display_order, shortcut name, shortcut_url, userID
-
-
- 
