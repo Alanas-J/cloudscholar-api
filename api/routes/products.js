@@ -3,7 +3,7 @@ const router = express.Router();
 
 //MongoDB model
 const mongoose = require('mongoose');
-const Product = require('../models/product');
+const Product = require('../mongoose_models/product');
 
 // Authentication
 const checkAuth = require('../middleware/check-auth');

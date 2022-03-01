@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const Order = require('../models/order');
+const Order = require('../mongoose_models/order');
 
 exports.orders_get_all = (req, res, next) => {
     Order.find()
