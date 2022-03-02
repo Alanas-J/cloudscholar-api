@@ -1,93 +1,49 @@
 const express = require('express');
 const app = express();
-const morgan = require('morgan'); // middleware for request logging
-const bodyParser = require('body-parser'); // used to parse body text into a JSON object.
-const mongoose = require('mongoose'); // MongoDB connection driver
+const morgan = require('morgan'); // request logging
+const port = process.env.PORT || 8086;
 
-const port = process.env.PORT || 8086; // use node env variable if set or 
 
-const productRoutes = require('./api/routes/products');
-const orderRoutes = require('./api/routes/orders');
-const userRoutes = require('./api/routes/user')
-
-/*
-// WILL NEED TO BE removed FOR SQL ============ 
-mongoose.connect("mongodb+srv://alanas:"+ process.env.MONGO_ATLAS_PW +"@cloudscholar-db.tt9k7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    {
-        //useMongoClient: true
-    }
-);*/
-
-// middleware piping =====================================================
+// 1. Initial Request/Response Processing
 app.use(morgan('dev')); // Used to log
 
-// app.use(express.static('/uploads', 'uploads')); to enable static dirs
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
-
-
-// CORS Handing ============================================= // better solution in tutorial using a cors import
-app.use((req, res, next) => {
+app.use((req, res, next) => { // CORS, better method under https://github.com/bezkoder/
     res.header('Access-Control-Allow-Origin', '*'); // can restrict what web pages can use your API, not POSTMAN.
     res.header('Access-Control-Allow-Headers', 'Orgin, X-RequestedWith, Content-Type, Accept, Authorization');
 
-    // A client usually asks the server what its able to do first with an OPTIONS request.
-    if(req.method === 'OPTIONS'){
+    if(req.method === 'OPTIONS'){ // What a client can do
         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
         return res.status(200).json({});
     }
     next();
 });
 
-const db = require("./api/models");
 
-//db.sequelize.sync();
-// // drop the table if it already exists //force: true
-db.sequelize.sync({ force: true }).then(() => {
-   console.log("Drop and re-sync db.");
-});
-
-
-
-
-
-// Route Handing =============================================
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
-app.use('/user', userRoutes);
+// 2. Route Handing =============================================
+app.use('/', require('./api/routes/user.routes'));
+app.use('/user_data', require('./api/routes/user_data.routes'));
 require("./api/routes/tutorial.routes")(app);
 
-// Catches all other routes
+
+// 3. Error handling
 app.use((req, res, next) => {
     const error = new Error('Not Found');
     error.status = 404;
-
     next(error);
 });
-
-
-// Catches errors where thrown. ============================
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
-    res.json({
-        error: {
-            message: error.message
-        }
-    });
+    res.json({ error: { message: error.message }});
 });
 
+
+// 4. Connection initialization
+const db = require("./api/models");
+db.sequelize.sync({ force: true }).then(() => {
+    console.log("Drop and re-sync db.");
+});
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
 });
-
-
-
-// =================================== AUX FUNCTIONS =================================================================
-async function test(){
-    try {
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-    } catch (error) {
-        console.error('Unable to connect to the database:', error);
-    }
-}
