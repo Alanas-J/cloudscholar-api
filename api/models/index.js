@@ -17,7 +17,18 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// models.
+// Models
+db.users = require("./user.model")(sequelize, Sequelize);
+
+db.subjects = require("./subject.model")(sequelize, Sequelize);
+
+db.classes = require("./class.model")(sequelize, Sequelize);
+
+db.tasks = require("./task.model")(sequelize, Sequelize);
+
+db.shortcut_links = require("./shortcut_link.model")(sequelize, Sequelize);
+
+
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
 db.comments = require("./comment.model.js")(sequelize, Sequelize);
 db.tutorials.hasMany(db.comments, { as: "comments" });

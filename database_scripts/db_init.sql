@@ -60,6 +60,7 @@ CREATE TABLE cloudscholar_shortcut_link (
 
     name VARCHAR(255),
     url VARCHAR(255),
+    order INT,
 
     CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES cloudscholar_user(user_id)
 );
