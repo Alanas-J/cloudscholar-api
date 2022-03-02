@@ -1,8 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
     const Subject = sequelize.define("cloudscholar_subject", {
-      day: {
-        type: Sequelize.INTEGER
-      },
       name: {
         type: Sequelize.STRING
       },

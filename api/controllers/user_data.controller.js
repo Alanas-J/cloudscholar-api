@@ -74,5 +74,40 @@ exports.updateById = async (req, res, next) => {
 
 // Temporary test mapping
 exports.createUserData = (req, res, next) => {
+
+    User.create(
+        {
+            email: "asassdfg@gmail.com",
+            password: "password",
+            subjects: [{
+                name: 'Test subject 1',
+                colour: '#111111',
+                classes: [{
+                    day: 1,
+                    type: "Lab",
+                    location:"CQ-1112"
+                }
+                ]
+            }]
+        }, 
+        { 
+            include: [
+            {
+                association: "subjects",
+                include: ["classes", "tasks"]
+            },
+            {
+                association: "shortcut_links"
+            }]
+        })
+        .then(data => {
+            res.send(data);
+        })
+        .catch(err => {
+            res.status(500).send({
+                message:
+                err.message || "Some error occurred during creation."
+            });
+        });
     
 }
