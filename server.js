@@ -22,7 +22,7 @@ app.use((req, res, next) => { // CORS, better method under https://github.com/be
 
 
 // 2. Route Handing =============================================
-app.use('/', require('./api/routes/user.routes'));
+app.use('/', require('./api/routes/auth.routes'));
 app.use('/user_data', require('./api/routes/user_data.routes'));
 require("./api/routes/tutorial.routes")(app);
 

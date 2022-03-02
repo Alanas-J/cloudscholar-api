@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const user_data = require("../controllers/tutorial.controller.js");
+const user_data = require("../controllers/user_data.controller.js");
 
 router.get('/:user_id', user_data.getById);
 
