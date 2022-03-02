@@ -39,6 +39,40 @@ exports.getById = (req, res, next) => {
 
 };
 
-exports.updateById = (req, res, next) => {
+
+exports.updateById = async (req, res, next) => {
+
+    // Nested async to ensure rollback failure is caught.
+    const asyncOp = async () => {
+        const t = await sequelize.transaction();
+        try {
+
+            // Do some things 
+
+            await t.commit();
+
+        } catch (error) {
+            await t.rollback();
+
+            console.log(err);
+            res.status(500).json({
+              error: err
+            });
+        }
+    };
+
+    asyncOp()
+        .catch( (err) => {
+            console.log(err);
+            res.status(500).json({
+              error: err
+            });
+        });
 
 };
+
+
+// Temporary test mapping
+exports.createUserData = (req, res, next) => {
+    
+}
