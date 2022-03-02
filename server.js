@@ -10,12 +10,13 @@ const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
 const userRoutes = require('./api/routes/user')
 
-// WILL NEED TO BE removed FOR SQL ============
+/*
+// WILL NEED TO BE removed FOR SQL ============ 
 mongoose.connect("mongodb+srv://alanas:"+ process.env.MONGO_ATLAS_PW +"@cloudscholar-db.tt9k7.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
     {
         //useMongoClient: true
     }
-);
+);*/
 
 // middleware piping =====================================================
 app.use(morgan('dev')); // Used to log
@@ -38,13 +39,13 @@ app.use((req, res, next) => {
     next();
 });
 
-const db = require("./app/models");
+const db = require("./api/models");
 
-db.sequelize.sync();
-// // drop the table if it already exists
-// db.sequelize.sync({ force: true }).then(() => {
-//   console.log("Drop and re-sync db.");
-// });
+//db.sequelize.sync();
+// // drop the table if it already exists //force: true
+db.sequelize.sync({ force: true }).then(() => {
+   console.log("Drop and re-sync db.");
+});
 
 
 
@@ -54,7 +55,7 @@ db.sequelize.sync();
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
 app.use('/user', userRoutes);
-require("./app/routes/tutorial.routes")(app);
+require("./api/routes/tutorial.routes")(app);
 
 // Catches all other routes
 app.use((req, res, next) => {
@@ -75,7 +76,7 @@ app.use((error, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
+app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
 });
 
