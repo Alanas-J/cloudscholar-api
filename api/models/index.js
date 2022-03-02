@@ -16,18 +16,30 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
+
 // Models
 db.users = require("./user.model")(sequelize, Sequelize);
 
 db.subjects = require("./subject.model")(sequelize, Sequelize);
+db.users.hasMany(db.subjects, { as: "subjects", foreignKey: "user_id",});
+db.subjects.belongsTo(db.users, {as: "subject_user", foreignKey: "user_id"});
 
 db.classes = require("./class.model")(sequelize, Sequelize);
+db.subjects.hasMany(db.classes, {as: "classes", foreignKey: "subject_id"});
+db.classes.belongsTo(db.subjects, {as: "class_subject", foreignKey: "subject_id"});
 
 db.tasks = require("./task.model")(sequelize, Sequelize);
+db.subjects.hasMany(db.tasks, { as: "tasks", foreignKey: "subject_id"});
+db.tasks.belongsTo(db.subjects, {as: "task_subject", foreignKey: "subject_id"});
 
 db.shortcut_links = require("./shortcut_link.model")(sequelize, Sequelize);
+db.users.hasMany(db.shortcut_links, { as: "shortcut_links",  foreignKey: "user_id",});
+db.shortcut_links.belongsTo(db.users, {as: "shortcut_link_user",  foreignKey: "user_id",});
 
 
+
+
+// ===================================================================
 db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
 db.comments = require("./comment.model.js")(sequelize, Sequelize);
 db.tutorials.hasMany(db.comments, { as: "comments" });
