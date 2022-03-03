@@ -122,10 +122,14 @@ exports.createUserData = (req, res, next) => {
         .then(data => { 
             //console.log(data);
             data.getSubjects()
-                .then(data2 => console.log(data2));
+                .then(data2 => {
 
-            data.getShortcut_links()
-                .then(data2 => console.log(data2));
+                    data2.forEach(element => {
+                        element.getClasses()
+                            .then(out => console.log(out))    
+                    });
+
+                });
 
             res.send(data);
         })
