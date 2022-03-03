@@ -1,9 +1,6 @@
 const db = require("../models");
 const User = db.users;
-const Subjects = db.subjects;
-const Tasks = db.tasks;
-const Classes = db.classes;
-const ShortcutLinks= db.shortcut_links;
+
 
 exports.getById = (req, res, next) => {
 
@@ -42,33 +39,42 @@ exports.getById = (req, res, next) => {
 
 exports.updateById = async (req, res, next) => {
 
-    console.log(req.params.id);
-
     // Nested async to ensure rollback failure is caught.
     const asyncOp = async () => {
-        const t = await sequelize.transaction();
+        const t = await db.sequelize.transaction();
+
         try {
             const user = await User.findByPk(req.params.id);
 
-            const subjects = await user.getSubjects()
+            // 1. Old Record Deletion
+            const subjects = await user.getSubjects();
             for(subj in subjects){
-                await subj.removeClasses()
-                await subj.removeTasks()
+                await subj.setClasses([]);
+                await subj.setTasks([]);
             }
                                        
-            await user.removeShortcut_links()
+            await user.setShortcut_links([]);
 
-            // I'll need to manually create and set new entries ontop
+            
+            // 2. Entity Recreation
+            for(subj in req.body.subjects){
 
+                await User.createSubject(
+                    subj,
+                    { include: ["classes", "tasks"]});
+            }
 
+            for(shortcut in req.body.shortcut_links){
+                await User.createShortcut_link(shortcut);
+            }
 
             await t.commit();
-        } catch (error) {
+        } catch (err) {
             await t.rollback();
 
             console.log(err);
             res.status(500).json({
-              error: err
+                error: err
             });
         }
     };
