@@ -42,12 +42,17 @@ exports.getById = (req, res, next) => {
 
 exports.updateById = async (req, res, next) => {
 
+    console.log(req.params.id);
+
     // Nested async to ensure rollback failure is caught.
     const asyncOp = async () => {
         const t = await sequelize.transaction();
         try {
+            const user = await User.findByPk(req.params.id);
 
-            // Do some things 
+            await user.getSubjects()
+            await user.getShortcut_links()
+
 
             await t.commit();
 
@@ -79,16 +84,30 @@ exports.createUserData = (req, res, next) => {
         {
             email: "asassdfg@gmail.com",
             password: "password",
-            subjects: [{
-                name: 'Test subject 1',
-                colour: '#111111',
-                classes: [{
-                    day: 1,
-                    type: "Lab",
-                    location:"CQ-1112"
+            subjects: [
+                {
+                    name: 'Test subject 1',
+                    colour: '#111111',
+                    classes: [{
+                        day: 1,
+                        type: "Lab",
+                        location:"CQ-1112"
+                    }]
+                },
+                {
+                    name: 'Test subject 2',
+                    colour: '#222222',
+                    classes: [{
+                        day: 1,
+                        type: "Lab",
+                        location:"CQ-1112"
+                    }]
                 }
-                ]
-            }]
+            ],
+            shortcut_links: [
+                {name: "asadfsfad",
+                url: "afsdfsa"}
+            ]
         }, 
         { 
             include: [
@@ -100,7 +119,14 @@ exports.createUserData = (req, res, next) => {
                 association: "shortcut_links"
             }]
         })
-        .then(data => {
+        .then(data => { 
+            //console.log(data);
+            data.getSubjects()
+                .then(data2 => console.log(data2));
+
+            data.getShortcut_links()
+                .then(data2 => console.log(data2));
+
             res.send(data);
         })
         .catch(err => {
