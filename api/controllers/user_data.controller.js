@@ -1,5 +1,8 @@
 const db = require("../models");
 const User = db.users;
+const Subject = db.subjects;
+const Task = db.subjects;
+const ShortcutLink = db.shortcut_links;
 
 
 exports.getById = (req, res, next) => {
@@ -45,34 +48,43 @@ exports.updateById = async (req, res, next) => {
 
         try {
             const user = await User.findByPk(req.params.id);
-
-            // 1. Old Record Deletion
-            const subjects = await user.getSubjects();
-            console.log(subjects);
-            for(const subject in subjects){
-
-                console.log("subj value: " );
-                console.log(subject);
-                
-                //await subject.setTasks([]);
-                //await subject.setClasses([]);
-            }
-                                       
-            await user.setShortcut_links([]);
-
             
-            // 2. Entity Recreation
-            for(subj in req.body.subjects){
+            if (user) {
+                // 1. Old Record Deletion (Using Cascading implicitly on nested records.)
+                await Subject.destroy({where: {user_id: user.id}});
+                await Task.destroy({where: {user_id: user.id}});
+                await ShortcutLink.destroy({where: {user_id: user.id}});
+            }
+            
+            console.log("pre loop");
+            
 
-                await User.createSubject(
+            const subjects = req.body.subjects;
+            console.log(subjects[0]);
+
+            for(let i = 0; i < subjects.length; i++){
+                console.log(subjects[i]);
+                await user.createSubject(
+                    subjects[i],
+                    { include: ["classes", "tasks"]});
+            }
+            // 2. Entity Recreation
+            /*
+            for(const subj in req.body.subjects){
+
+                console.log(req.body.subjects);
+                console.log(subj);
+
+                await user.createSubject(
                     subj,
                     { include: ["classes", "tasks"]});
             }
+            
 
             for(shortcut in req.body.shortcut_links){
-                await User.createShortcut_link(shortcut);
+                await user.createShortcut_links(shortcut);
             }
-
+            */
             await t.commit();
 
             res.status(200).json(user);
