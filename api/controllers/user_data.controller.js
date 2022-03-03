@@ -50,12 +50,19 @@ exports.updateById = async (req, res, next) => {
         try {
             const user = await User.findByPk(req.params.id);
 
-            await user.getSubjects()
-            await user.getShortcut_links()
+            const subjects = await user.getSubjects()
+            for(subj in subjects){
+                await subj.removeClasses()
+                await subj.removeTasks()
+            }
+                                       
+            await user.removeShortcut_links()
+
+            // I'll need to manually create and set new entries ontop
+
 
 
             await t.commit();
-
         } catch (error) {
             await t.rollback();
 
@@ -96,12 +103,7 @@ exports.createUserData = (req, res, next) => {
                 },
                 {
                     name: 'Test subject 2',
-                    colour: '#222222',
-                    classes: [{
-                        day: 1,
-                        type: "Lab",
-                        location:"CQ-1112"
-                    }]
+                    colour: '#222222'
                 }
             ],
             shortcut_links: [
