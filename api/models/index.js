@@ -37,15 +37,4 @@ db.users.hasMany(db.shortcut_links, { as: "shortcut_links",  foreignKey: "user_i
 db.shortcut_links.belongsTo(db.users, {as: "shortcut_link_user",  foreignKey: "user_id",});
 
 
-
-
-// ===================================================================
-db.tutorials = require("./tutorial.model.js")(sequelize, Sequelize);
-db.comments = require("./comment.model.js")(sequelize, Sequelize);
-db.tutorials.hasMany(db.comments, { as: "comments" });
-db.comments.belongsTo(db.tutorials, {
-  foreignKey: "tutorialId",
-  as: "tutorial",
-});
-
 module.exports = db; // Exports a configured sequelize connection/models and Sequelize.

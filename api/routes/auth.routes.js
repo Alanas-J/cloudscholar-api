@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const auth = require("../controllers/auth.controller.js");
-const preRegistrationCheck = require('../middleware/pre-registration');
+const preRegistrationCheck = require('../middleware/payload_verification/pre-registration');
 
 router.post('/login', auth.login);
 
