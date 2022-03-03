@@ -7,6 +7,5 @@ router.get('/:id', user_data.getById);
 
 router.post('/:id', user_data.updateById);
 
-router.post('/test/create', user_data.createUserData);
 
 module.exports = router;

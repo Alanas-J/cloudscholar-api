@@ -6,7 +6,7 @@ module.exports = (sequelize, Sequelize) => {
       url: {
         type: Sequelize.STRING
       },      
-      order: {
+      order_no: {
         type: Sequelize.INTEGER
       }
     });

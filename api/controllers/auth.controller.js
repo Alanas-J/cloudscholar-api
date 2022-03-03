@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require("../models");
-const Op = db.Sequelize.Op;
 
 const User = db.users;
 
@@ -53,7 +52,7 @@ exports.login = (req, res, next) => {
 }
 
 exports.refreshLogin = (req, res, next) => {
-
+    // Future implementation
 }
 
 exports.register = (req, res, next) => {
@@ -61,22 +60,24 @@ exports.register = (req, res, next) => {
     bcrypt.hash(req.body.password, 10, (err, hash) => {
         if(err){
             return res.status(500).json({
-                error: err
+                message: "Some error occurred during registration processing.",
+                err: error
             });
+
         } else {
             const user = {
                 email: req.body.email,
                 password: hash
-              };
+            };
 
-              User.create(user)
+            User.create(user)
                 .then(data => {
-                    res.send(data);
+                    res.json(data);
                 })
-                .catch(err => {
+                .catch(error => {
                     res.status(500).send({
-                        message:
-                        err.message || "Some error occurred during registration."
+                        message: "Some error occurred during registration.",
+                        error: error
                     });
                 });
         }
