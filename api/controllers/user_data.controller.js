@@ -44,50 +44,37 @@ exports.updateById = async (req, res, next) => {
 
     // Nested async to ensure rollback failure is caught.
     const asyncOp = async () => {
+
+        const user = await User.findByPk(req.params.id);
+        if(!user)
+            return res.status(400).json({
+                error: "User not found in DB."
+              });
         const t = await db.sequelize.transaction();
 
         try {
-            const user = await User.findByPk(req.params.id);
-            
-            if (user) {
-                // 1. Old Record Deletion (Using Cascading implicitly on nested records.)
-                await Subject.destroy({where: {user_id: user.id}});
-                await Task.destroy({where: {user_id: user.id}});
-                await ShortcutLink.destroy({where: {user_id: user.id}});
-            }
-            
-            console.log("pre loop");
-            
-
-            const subjects = req.body.subjects;
-            console.log(subjects[0]);
-
-            for(let i = 0; i < subjects.length; i++){
-                console.log(subjects[i]);
-                await user.createSubject(
-                    subjects[i],
-                    { include: ["classes", "tasks"]});
-            }
+            // 1. Old Entity Deletion (Using Cascading implicitly on nested records.)
+            await Subject.destroy({where: {user_id: user.id}});
+            await Task.destroy({where: {user_id: user.id}});
+            await ShortcutLink.destroy({where: {user_id: user.id}});
+        
             // 2. Entity Recreation
-            /*
-            for(const subj in req.body.subjects){
-
-                console.log(req.body.subjects);
-                console.log(subj);
-
-                await user.createSubject(
-                    subj,
-                    { include: ["classes", "tasks"]});
+            if(req.body.subjects){
+                for(let i = 0; i < req.body.subjects.length; i++){
+                    await user.createSubject(
+                        req.body.subjects[i],
+                        { include: ["classes", "tasks"]});
+                }
             }
-            
-
-            for(shortcut in req.body.shortcut_links){
-                await user.createShortcut_links(shortcut);
+            if(req.body.shortcut_links){
+                for(let i = 0; i < req.body.shortcut_links.length; i++){
+                    await user.createTask(req.body.shortcut_links[i]);
+                }
             }
-            */
+
             await t.commit();
-
             res.status(200).json(user);
+            
         } catch (err) {
             await t.rollback();
 
