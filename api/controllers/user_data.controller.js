@@ -1,42 +1,31 @@
 const db = require("../models");
+const getUserData = require("./logic/user_to_userdata")
 const User = db.users;
 const Subject = db.subjects;
 const Task = db.subjects;
 const ShortcutLink = db.shortcut_links;
 
 
-exports.getById = (req, res, next) => {
+exports.getById = async (req, res, next) => {
 
-    console.log(req.params.id);
+    try {
+        const user = await User.findByPk(req.params.id)
 
-    User.findByPk(req.params.id, { include: [
-            {
-                association: "subjects",
-                include: ["classes", "tasks"]
-            },
-            {
-                association: "shortcut_links"
-            }]
-        })
-        .then(data => {
-
-            console.log(data);
-
-            if (data) {
-                console.log(data);
-                res.send(data);
-            } else {
-            res.status(404).send({
-                message: `Cannot find Tutorial with id=${req.params.id}.`
+        if(!user){
+            return res.status(404).json({
+                message: `User with id=${req.params.id} not found.`
             });
-            }
-        })
-        .catch(err => {
-            res.status(500).send({
-            message: "Error retrieving Tutorial with id=" + req.params.id
-            });
+        }
+
+        res.status(200).json(await getUserData(user));
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error fetching userid=" + req.params.id,
+            error: error
         });
 
+    }
 };
 
 
@@ -47,7 +36,7 @@ exports.updateById = async (req, res, next) => {
 
         const user = await User.findByPk(req.params.id);
         if(!user)
-            return res.status(400).json({
+            return res.status(404).json({
                 error: "User not found in DB."
               });
         const t = await db.sequelize.transaction();
