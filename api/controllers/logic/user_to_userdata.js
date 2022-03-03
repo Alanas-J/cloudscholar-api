@@ -1,4 +1,3 @@
-// function will get passed a user and then send back subjects/classes/tasks/urls in a user_data container, make it async.
 
 module.exports = async (user) => {
     const user_data = {};
@@ -11,7 +10,7 @@ module.exports = async (user) => {
                 attributes: ['day', 'type', 'location', 'start_time', 'end_time','description']
             },
             {
-                association: "tasks",
+                association: 'tasks',
                 attributes: ['name', 'due_datetime', 'description']
             }]
         });
