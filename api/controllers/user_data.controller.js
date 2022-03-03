@@ -48,9 +48,14 @@ exports.updateById = async (req, res, next) => {
 
             // 1. Old Record Deletion
             const subjects = await user.getSubjects();
-            for(subj in subjects){
-                await subj.setClasses([]);
-                await subj.setTasks([]);
+            console.log(subjects);
+            for(const subject in subjects){
+
+                console.log("subj value: " );
+                console.log(subject);
+                
+                //await subject.setTasks([]);
+                //await subject.setClasses([]);
             }
                                        
             await user.setShortcut_links([]);
@@ -69,6 +74,8 @@ exports.updateById = async (req, res, next) => {
             }
 
             await t.commit();
+
+            res.status(200).json(user);
         } catch (err) {
             await t.rollback();
 
@@ -128,17 +135,6 @@ exports.createUserData = (req, res, next) => {
             }]
         })
         .then(data => { 
-            //console.log(data);
-            data.getSubjects()
-                .then(data2 => {
-
-                    data2.forEach(element => {
-                        element.getClasses()
-                            .then(out => console.log(out))    
-                    });
-
-                });
-
             res.send(data);
         })
         .catch(err => {
