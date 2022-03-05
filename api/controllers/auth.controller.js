@@ -20,7 +20,7 @@ exports.login = (req, res, next) => {
                 bcrypt.compare(req.body.password, user.password, (err, result) => {
                     if(err || !result){
                         return res.status(401).json({
-                            message: 'Login failed.'
+                            message: 'Login failed, email or pasword is incorrect.'
                         });
                     }
 
@@ -44,7 +44,7 @@ exports.login = (req, res, next) => {
                 });
             } else{
                 res.status(401).json({
-                    message: 'Login failed.'
+                    message: 'Login failed, email or pasword is incorrect.'
                 }); 
             }
         });
