@@ -16,7 +16,11 @@ const { TokenExpiredError } = jwt;
 
 // Else token and JWT not related
 
+// Alternative: process expired jwt
+// Just check if a JWT is present and expired.
+// else error.
 
+// Controller checks if the token contents are linked to the refresh.
 
 module.exports = async (req, res, next) => {
 
