@@ -13,7 +13,7 @@ module.exports = (sequelize, Sequelize) => {
     // Additional functions the token model can call on itself.
     RefreshToken.createToken = async function (user) {
 
-        // Could limit the no of refresh tokens.
+        // Could limit the no of refresh tokens here to one, but what if multiple sessions?.
         const expiredAt = new Date();
   
         expiredAt.setSeconds(expiredAt.getSeconds() + process.env.JWT_REFRESH_EXPIRATION);
@@ -30,7 +30,7 @@ module.exports = (sequelize, Sequelize) => {
     };
   
     RefreshToken.isValid = (token) => {
-        return token.expiryDate.getTime() > new Date().getTime();
+        return token.expiry_date.getTime() > new Date().getTime();
     };
   
     return RefreshToken;

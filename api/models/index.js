@@ -40,6 +40,6 @@ db.shortcut_links.belongsTo(db.users, {as: "shortcut_link_user",  foreignKey: "u
 // JWT Refresh Token
 db.refresh_tokens = require("./authentication/refresh_token.model")(sequelize, Sequelize);
 db.users.hasOne(db.refresh_tokens, {foreignKey: 'user_id', targetKey: 'id'});
-db.refresh_tokens.belongsTo(db.users, {foreignKey: 'user_id', targetKey: 'id'});
+db.refresh_tokens.belongsTo(db.users, {as: "user", foreignKey: 'user_id', targetKey: 'id'});
 
 module.exports = db; // Exports a configured sequelize connection/models and Sequelize.

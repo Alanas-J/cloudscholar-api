@@ -33,7 +33,7 @@ exports.login = (req, res, next) => {
                             },
                             process.env.JWT_KEY,
                             {
-                                 expiresIn: "1h"
+                                 expiresIn: "1m"
                             }
                         );
 
@@ -73,18 +73,20 @@ exports.refresh_token = async (req, res, next) => {
         const refresh_token = await RefreshToken.findOne({ where: { token: req.body.refresh_token } });
 
         if (!refresh_token) {
-            res.status(403).json({ message: "Refresh token is not in database!" });
-            return;
+            return res.status(403).json({ message: "Refresh token is not in database!" });
         }
 
         if (!RefreshToken.isValid(refresh_token)) {
-            RefreshToken.destroy({ where: { id: refresh_token.id } });
+
+            console.log("token was not valid.");
+
+            await RefreshToken.destroy({ where: { id: refresh_token.id } });
         
             return res.status(403).json({
                 message: "Refresh token was expired. Please make a new signin request",
             });
         }
-
+       
         const user = await refresh_token.getUser();
 
         const new_token = jwt.sign(
@@ -103,9 +105,12 @@ exports.refresh_token = async (req, res, next) => {
             token: new_token,
             refresh_token: refresh_token.token,
         });
-        
-    } catch (err) {
-        return res.status(500).json({ message: err });
+
+    } catch (error) {
+        return res.status(500).json({ 
+            error: error,
+            message: "Internal server error refreshing token"
+         });
     }
 }
 
