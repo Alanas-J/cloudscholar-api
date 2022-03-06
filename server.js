@@ -40,7 +40,7 @@ app.use((error, req, res, next) => {
 
 // 4. Connection initialization
 const db = require("./api/models");
-db.sequelize.sync(); // { force: true }
+db.sequelize.sync({force: true}); // { force: true }
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);

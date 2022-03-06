@@ -17,7 +17,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 
-// Models
+// CloudScholar Models
 db.users = require("./user.model")(sequelize, Sequelize);
 
 db.subjects = require("./subject.model")(sequelize, Sequelize);
@@ -36,5 +36,10 @@ db.shortcut_links = require("./shortcut_link.model")(sequelize, Sequelize);
 db.users.hasMany(db.shortcut_links, { as: "shortcut_links",  foreignKey: "user_id", onDelete: 'cascade', hooks: true});
 db.shortcut_links.belongsTo(db.users, {as: "shortcut_link_user",  foreignKey: "user_id",});
 
+
+// JWT Refresh Token
+db.refresh_tokens = require("./authentication/refresh_token.model")(sequelize, Sequelize);
+db.users.hasOne(db.refresh_tokens, {foreignKey: 'user_id', targetKey: 'id'});
+db.refresh_tokens.belongsTo(db.users, {as: "user", foreignKey: 'user_id', targetKey: 'id'});
 
 module.exports = db; // Exports a configured sequelize connection/models and Sequelize.
