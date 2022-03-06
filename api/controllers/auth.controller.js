@@ -79,6 +79,10 @@ exports.refresh_token = async (req, res, next) => {
             return res.status(403).json({ message: "Refresh token is not in database!" });
         }
 
+        if(req.userJWT.userId != refresh_token.user_id){
+            return res.status(403).json({ message: "Refresh token and JWT do not match." });
+        }
+
         if (!RefreshToken.isValid(refresh_token)) {
 
             console.log("token was not valid.");
