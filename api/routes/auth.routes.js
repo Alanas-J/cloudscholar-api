@@ -5,7 +5,7 @@ const preRegistrationCheck = require('../middleware/payload_verification/pre-reg
 
 router.post('/login', auth.login);
 
-router.post('/refresh_login', auth.refreshLogin);
+router.post('/refresh_token', auth.refresh_token);
 
 router.post('/register', preRegistrationCheck, auth.register);
 

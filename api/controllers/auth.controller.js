@@ -62,8 +62,51 @@ exports.login = (req, res, next) => {
 
 }
 
-exports.refreshLogin = (req, res, next) => {
-    // Future implementation
+exports.refresh_token = async (req, res, next) => {
+
+    // Check for token
+    if (!req.body.refresh_token) {
+        return res.status(403).json({ message: "Refresh Token is required!" });
+    }
+
+    try {
+        const refresh_token = await RefreshToken.findOne({ where: { token: req.body.refresh_token } });
+
+        if (!refresh_token) {
+            res.status(403).json({ message: "Refresh token is not in database!" });
+            return;
+        }
+
+        if (!RefreshToken.isValid(refresh_token)) {
+            RefreshToken.destroy({ where: { id: refresh_token.id } });
+        
+            return res.status(403).json({
+                message: "Refresh token was expired. Please make a new signin request",
+            });
+        }
+
+        const user = await refresh_token.getUser();
+
+        const new_token = jwt.sign(
+            {
+                email: user.email,
+                userId: user.id
+            },
+            process.env.JWT_KEY,
+            {
+                 expiresIn: "1h"
+            }
+        );
+
+        return res.status(200).json({
+            message: "Token refreshed sucessfully!",
+            token: new_token,
+            refresh_token: refresh_token.token,
+        });
+        
+    } catch (err) {
+        return res.status(500).json({ message: err });
+    }
 }
 
 exports.register = (req, res, next) => {
