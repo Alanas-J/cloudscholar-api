@@ -22,24 +22,25 @@ const { TokenExpiredError } = jwt;
 
 // Controller checks if the token contents are linked to the refresh.
 
-module.exports = async (req, res, next) => {
+module.exports = (req, res, next) => {
+
+    if(!req.headers.authorization){
+        return res.status(401).json({ message: "Expired auth token not in header." });
+    }
 
     try {
         const token = req.headers.authorization.split(" ")[1];
-        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        const decoded = jwt.verify(token, process.env.JWT_KEY, {ignoreExpiration: true});
+
+        const time = new Date;
+        if(time.getTime()/1000 < decoded.exp){
+            return res.status(401).json({ message: "You can only refresh an expired token." });
+        }
+
         req.userJWT = decoded;
+        next();
 
     } catch (error) {
-
-        return handleJWTError(error, res);
+        return res.status(401).json({ message: "This token is invalid." });
     }
-    next();
-}
-
-function handleJWTError(error, res) {
-    if (error instanceof TokenExpiredError) {
-      return res.status(401).json({ message: "Unauthorized! Access token expired." });
-    }
-  
-    return res.sendStatus(401).json({ message: "Unauthorized!" });
 }
