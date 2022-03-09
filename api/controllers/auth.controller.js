@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require("../models");
+const env = require(`../../config/env.${process.env.NODE_ENV}.config`);
+
 
 const User = db.users;
 const RefreshToken = db.refresh_tokens;
@@ -34,9 +36,9 @@ exports.login = (req, res, next) => {
                                 email: user.email,
                                 userId: user.id
                             },
-                            process.env.JWT_KEY,
+                            env.JWT.KEY,
                             {
-                                 expiresIn: "1m"
+                                 expiresIn: env.JWT.EXPIRATION
                             }
                         );
 
@@ -101,9 +103,9 @@ exports.refresh_token = async (req, res, next) => {
                 email: user.email,
                 userId: user.id
             },
-            process.env.JWT_KEY,
+            env.JWT.KEY,
             {
-                 expiresIn: "1h"
+                 expiresIn: env.JWT.EXPIRATION
             }
         );
 

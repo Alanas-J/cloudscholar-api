@@ -1,4 +1,5 @@
 const { v4: uuidv4 } = require("uuid");
+const env = require(`../../../config/env.${process.env.NODE_ENV}.config`);
 
 module.exports = (sequelize, Sequelize) => {
     const RefreshToken = sequelize.define("refresh_token", {
@@ -16,7 +17,7 @@ module.exports = (sequelize, Sequelize) => {
         // Could limit the no of refresh tokens here to one, but what if multiple sessions?.
         const expiredAt = new Date();
   
-        expiredAt.setSeconds(expiredAt.getSeconds() + process.env.JWT_REFRESH_EXPIRATION);
+        expiredAt.setSeconds(expiredAt.getSeconds() + env.JWT.REFRESH_TOKEN.EXPIRATION);
   
         const _token = uuidv4();
   

@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { TokenExpiredError } = jwt;
-
+const env = require(`../../../config/env.${process.env.NODE_ENV}.config`);
 
 // Does the auth header have a JWT?
 // if NOT - no token found error.
@@ -30,7 +29,7 @@ module.exports = (req, res, next) => {
 
     try {
         const token = req.headers.authorization.split(" ")[1];
-        const decoded = jwt.verify(token, process.env.JWT_KEY, {ignoreExpiration: true});
+        const decoded = jwt.verify(token, env.JWT.KEY, {ignoreExpiration: true});
 
         const time = new Date;
         if(time.getTime()/1000 < decoded.exp){

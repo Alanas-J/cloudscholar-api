@@ -1,7 +1,12 @@
 const express = require('express');
 const app = express();
-const morgan = require('morgan'); // request logging
+const morgan = require('morgan');
 const port = process.env.PORT || 8086;
+
+// 0. Check if env set.
+if(!process.env.NODE_ENV){
+    process.env.NODE_ENV = 'dev';
+}
 
 
 // 1. Initial Request/Response Processing
@@ -40,7 +45,7 @@ app.use((error, req, res, next) => {
 
 // 4. Connection initialization
 const db = require("./api/models");
-db.sequelize.sync({force: true}); // { force: true }
+db.sequelize.sync(); // { force: true }
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}.`);
