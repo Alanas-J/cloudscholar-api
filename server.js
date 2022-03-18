@@ -15,11 +15,12 @@ app.use(morgan('dev')); // Used to log
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 app.use((req, res, next) => { // CORS, better method under https://github.com/bezkoder/
-    res.header('Access-Control-Allow-Origin', '*'); // can restrict what web pages can use your API, not POSTMAN.
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // can restrict what web pages can use your API, not POSTMAN.
     res.header('Access-Control-Allow-Headers', 'Orgin, X-RequestedWith, Content-Type, Accept, Authorization');
 
     if(req.method === 'OPTIONS'){ // What a client can do
         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+        res.header('Access-Control-Allow-Credentials', 'true');
         return res.status(200).json({});
     }
     next();

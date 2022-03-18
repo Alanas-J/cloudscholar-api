@@ -21,5 +21,5 @@ function handleJWTError(error, res) {
       return res.status(401).json({ message: "Unauthorized! Access token expired." });
     }
   
-    return res.status(401).json({ message: "Unauthorized!" });
+    return res.status(401).json({ message: "A login token authorization error has ocurred." });
 }
