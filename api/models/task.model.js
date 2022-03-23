@@ -8,6 +8,9 @@ module.exports = (sequelize, Sequelize) => {
       },
       description: {
         type: Sequelize.STRING(512)
+      },
+      completed: {
+        type: Sequelize.BOOLEAN
       }
     });
     return Task;

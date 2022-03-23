@@ -8,7 +8,7 @@ module.exports = async (db, user, user_data) => {
         for(let i = 0; i < user_data.subjects.length; i++){
             await user.createSubject(
                 user_data.subjects[i],
-                { include: ["classes", "tasks"]});
+                {include: ["classes", "tasks"]});
         }
     }
 
