@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
 
 function handleJWTError(error, res) {
     if (error instanceof TokenExpiredError) {
-      return res.status(401).json({ message: "Unauthorized! Access token expired." });
+      return res.status(418).json({ message: "Unauthorized! Access token expired." });
     }
   
     return res.status(401).json({ message: "A login token authorization error has ocurred." });
