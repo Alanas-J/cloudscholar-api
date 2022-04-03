@@ -5,7 +5,7 @@ const port = process.env.PORT || 8086;
 
 // 0. Check if env set.
 if(!process.env.NODE_ENV){
-    process.env.NODE_ENV = 'dev';
+    process.env.NODE_ENV = 'local';
 }
 
 
