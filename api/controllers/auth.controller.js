@@ -137,10 +137,13 @@ exports.register = (req, res, next) => {
                 email: req.body.email,
                 password: hash
             };
-
             User.create(user)
                 .then(data => {
-                    res.json(data);
+                    res.status(201).json(
+                        {   
+                            message: 'Successful registration!',
+                            email: data.email
+                        });
                 })
                 .catch(error => {
                     res.status(500).send({
