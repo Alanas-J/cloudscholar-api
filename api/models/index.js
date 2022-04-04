@@ -35,7 +35,7 @@ db.users.hasMany(db.shortcut_links, { as: "shortcut_links",  foreignKey: "user_i
 db.shortcut_links.belongsTo(db.users, {as: "shortcut_link_user",  foreignKey: "user_id",});
 
 db.refresh_tokens = require("./authentication/refresh_token.model")(sequelize, Sequelize);
-db.users.hasOne(db.refresh_tokens, {foreignKey: 'user_id', targetKey: 'id'});
+db.users.hasMany(db.refresh_tokens, {foreignKey: 'user_id', targetKey: 'id'});
 db.refresh_tokens.belongsTo(db.users, {as: "user", foreignKey: 'user_id', targetKey: 'id'});
 
 module.exports = db; 
