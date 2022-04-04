@@ -5,16 +5,15 @@ module.exports = (sequelize, Sequelize) => {
     const RefreshToken = sequelize.define("refresh_token", {
         token: {
             type: Sequelize.STRING,
+            primaryKey: true
         },
         expiry_date: {
             type: Sequelize.DATE,
         },
     });
   
-    // Additional functions the token model can call on itself.
     RefreshToken.createToken = async function (user) {
 
-        // Could limit the no of refresh tokens here to one, but what if multiple sessions?.
         const expiredAt = new Date();
   
         expiredAt.setSeconds(expiredAt.getSeconds() + env.JWT.REFRESH_TOKEN.EXPIRATION);
