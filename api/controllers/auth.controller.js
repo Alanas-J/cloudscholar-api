@@ -84,18 +84,16 @@ exports.refresh_token = async (req, res, next) => {
         if(req.userJWT.userId != refresh_token.user_id){
             return res.status(403).json({ message: "Refresh token and JWT do not match." });
         }
+        await RefreshToken.destroy({ where: { id: refresh_token.id } });
 
+       
         if (!RefreshToken.isValid(refresh_token)) {
-
-            console.log("token was not valid.");
-
-            await RefreshToken.destroy({ where: { id: refresh_token.id } });
-        
             return res.status(403).json({
                 message: "Refresh token was expired. Please make a new signin request",
             });
         }
        
+        
         const user = await refresh_token.getUser();
 
         const new_token = jwt.sign(
@@ -108,11 +106,12 @@ exports.refresh_token = async (req, res, next) => {
                  expiresIn: env.JWT.EXPIRATION
             }
         );
+        const new_refresh_token =  await RefreshToken.createToken(user);
 
         return res.status(200).json({
             message: "Token refreshed sucessfully!",
             token: new_token,
-            refresh_token: refresh_token.token,
+            refresh_token: new_refresh_token,
         });
 
     } catch (error) {

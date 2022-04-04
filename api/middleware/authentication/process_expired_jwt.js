@@ -31,8 +31,8 @@ module.exports = (req, res, next) => {
         const token = req.headers.authorization.split(" ")[1];
         const decoded = jwt.verify(token, env.JWT.KEY, {ignoreExpiration: true});
 
-        const time = new Date;
-        if(time.getTime()/1000 < decoded.exp){
+        const time = new Date();
+        if((decoded.exp*1000) > time.getTime()){
             return res.status(401).json({ message: "You can only refresh an expired token." });
         }
 

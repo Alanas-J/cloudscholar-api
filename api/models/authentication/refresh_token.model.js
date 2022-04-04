@@ -31,7 +31,11 @@ module.exports = (sequelize, Sequelize) => {
     };
   
     RefreshToken.isValid = (token) => {
-        return token.expiry_date.getTime() > new Date().getTime();
+        const date = new Date();
+
+        console.log(token.expiry_date.getTime());
+        console.log(date.getTime());
+        return token.expiry_date.getTime() > date.getTime();
     };
   
     return RefreshToken;
