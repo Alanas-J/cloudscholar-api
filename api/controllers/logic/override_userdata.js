@@ -1,4 +1,4 @@
-import getUserData from './user_to_userdata';
+const getUserData = require('./user_to_userdata');
 
 module.exports = async (db, user, user_data) => {
 
