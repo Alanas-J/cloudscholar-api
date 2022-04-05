@@ -1,4 +1,4 @@
 # cloudscholar-api
-The Backend Implementation of CloudScholar
+The Backend API Implementation of the CloudScholar dissertation project.
 
-This contains the restful server alongside the SQL scripts that are used on the DB layer.
+## server.js is the Node.js entrypoint
