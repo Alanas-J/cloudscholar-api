@@ -1,4 +1,3 @@
-
 module.exports = async (user) => {
     const user_data = {};
 

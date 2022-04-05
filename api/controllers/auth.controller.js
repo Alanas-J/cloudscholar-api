@@ -2,17 +2,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require("../models");
 const env = require(`../../config/env.${process.env.NODE_ENV}.config`);
-
-
 const User = db.users;
 const RefreshToken = db.refresh_tokens;
 
 
 exports.login = (req, res, next) => {
     
-    console.log(req.userJWT);
-
-    // Validate request.
     if (!req.body.email || !req.body.password) {
         res.status(400).send({
           message: "'email' and 'password' fields expected."
@@ -38,16 +33,15 @@ exports.login = (req, res, next) => {
                             },
                             env.JWT.KEY,
                             {
-                                 expiresIn: env.JWT.EXPIRATION
-                            }
-                        );
+                                expiresIn: env.JWT.EXPIRATION
+                            });
 
                         const refresh_token = await RefreshToken.createToken(user);
 
                         return res.status(200).json({
-                             message: "Login success!",
-                             token: token,
-                             refresh_token: refresh_token
+                            message: "Login success!",
+                            token: token,
+                            refresh_token: refresh_token
                         });
                     }
                     
@@ -69,7 +63,6 @@ exports.login = (req, res, next) => {
 
 exports.refresh_token = async (req, res, next) => {
 
-    // Check for token
     if (!req.body.refresh_token) {
         return res.status(403).json({ message: "Refresh Token is required!" });
     }
@@ -86,14 +79,12 @@ exports.refresh_token = async (req, res, next) => {
         }
         await RefreshToken.destroy({ where: { id: refresh_token.id } });
 
-       
-        if (!RefreshToken.isValid(refresh_token)) {
+       if (!RefreshToken.isValid(refresh_token)) {
             return res.status(403).json({
                 message: "Refresh token was expired. Please make a new signin request",
             });
         }
        
-        
         const user = await refresh_token.getUser();
 
         const new_token = jwt.sign(
