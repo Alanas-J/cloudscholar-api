@@ -1,3 +1,5 @@
+import getUserData from './user_to_userdata';
+
 module.exports = async (db, user, user_data) => {
 
     await db.subjects.destroy({where: {user_id: user.id}});
