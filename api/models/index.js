@@ -4,6 +4,9 @@ const Sequelize = require("sequelize");
 const sequelize = new Sequelize(DATABASE.DB, DATABASE.USER, DATABASE.PASSWORD, {
     host: DATABASE.HOST,
     dialect: DATABASE.dialect,
+    dialectOptions: {
+        ssl: 'Amazon RDS'
+    },
     pool: {
         max: DATABASE.pool.max,
         min: DATABASE.pool.min,
