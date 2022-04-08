@@ -8,7 +8,7 @@ module.exports = {
     },
         
     DATABASE: {
-        HOST: "cloudscholar-dev-db.cqjsibxccdnt.eu-west-1.rds.amazonaws.com",
+        HOST: "database-1.cqjsibxccdnt.eu-west-1.rds.amazonaws.com",
         USER: "postgres",
         PASSWORD: "cs-password",
         DB: "postgres",
