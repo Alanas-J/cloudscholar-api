@@ -1,19 +1,7 @@
 const {DATABASE} = require(`../../config/env.${process.env.NODE_ENV}.config.js`);
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize(DATABASE.DB, DATABASE.USER, DATABASE.PASSWORD, {
-    host: DATABASE.HOST,
-    dialect: DATABASE.dialect,
-    dialectOptions: {
-        ssl: 'Amazon RDS'
-    },
-    pool: {
-        max: DATABASE.pool.max,
-        min: DATABASE.pool.min,
-        acquire: DATABASE.pool.acquire,
-        idle: DATABASE.pool.idle
-    }
-});
+const sequelize = new Sequelize(DATABASE.DB, DATABASE.USER, DATABASE.PASSWORD, DATABASE.CONNECTION_CONFIG);
 
 const db = {};
 db.Sequelize = Sequelize;

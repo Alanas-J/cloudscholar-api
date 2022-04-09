@@ -8,16 +8,18 @@ module.exports = {
     },
         
     DATABASE: {
-        HOST: "database-1.cqjsibxccdnt.eu-west-1.rds.amazonaws.com",
-        USER: "postgres",
-        PASSWORD: "cs-password",
         DB: "postgres",
-        dialect: "postgres",
-        pool: {
-            max: 5,
-            min: 0,
-            acquire: 30000,
-            idle: 10000
-        }
+        USER: "postgres",
+        PASSWORD: "secretpassword",
+        CONNECTION_CONFIG: {
+            host: "cloudscholar-db.cqjsibxccdnt.eu-west-1.rds.amazonaws.com",
+            dialect: "postgres",
+            pool: {
+                max: 5,
+                min: 0,
+                acquire: 30000,
+                idle: 10000
+            }
+        }   
     }
 };
