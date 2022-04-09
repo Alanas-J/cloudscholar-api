@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const port = process.env.PORT || 8086;
 
 if(!process.env.NODE_ENV){
-    process.env.NODE_ENV = 'local';
+    process.env.NODE_ENV = 'dev';
 }
 
 app.use(morgan('dev'));
