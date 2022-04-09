@@ -3,7 +3,7 @@ const getUserData = require("./logic/user_to_userdata")
 const overrideUserData = require("./logic/override_userdata")
 const User = db.users;
 
-exports.get = async (req, res, next) => {
+exports.get = async (req, res) => {
 
     try {
         const user = await User.findByPk(req.userJWT.userId);
@@ -25,7 +25,7 @@ exports.get = async (req, res, next) => {
     }
 };
 
-exports.update = async (req, res, next) => {
+exports.update = async (req, res) => {
 
     let user; 
     let transaction;

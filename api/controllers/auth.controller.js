@@ -6,7 +6,7 @@ const User = db.users;
 const RefreshToken = db.refresh_tokens;
 
 
-exports.login = (req, res, next) => {
+exports.login = (req, res) => {
     
     if (!req.body.email || !req.body.password) {
         res.status(400).send({
@@ -61,7 +61,7 @@ exports.login = (req, res, next) => {
 
 }
 
-exports.refresh_token = async (req, res, next) => {
+exports.refresh_token = async (req, res) => {
 
     if (!req.body.refresh_token) {
         return res.status(403).json({ message: "Refresh Token is required!" });
@@ -113,13 +113,13 @@ exports.refresh_token = async (req, res, next) => {
     }
 }
 
-exports.register = (req, res, next) => {
+exports.register = (req, res) => {
 
     bcrypt.hash(req.body.password, 10, (err, hash) => {
         if(err){
             return res.status(500).json({
                 message: "Some error occurred during registration processing.",
-                err: error
+                err: err
             });
 
         } else {

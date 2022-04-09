@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const port = process.env.PORT || 8086;
 
 if(!process.env.NODE_ENV){
-    process.env.NODE_ENV = 'dev';
+    process.env.NODE_ENV = 'local';
 }
 
 app.use(morgan('dev'));
@@ -26,7 +26,7 @@ app.use((req, res, next) => {
 app.use('/', require('./api/routes/auth.routes'));
 app.use('/user_data', require('./api/routes/user_data.routes'));
 
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
     const error = new Error('Not Found');
     error.status = 404;
     next(error);
