@@ -3,7 +3,10 @@ module.exports = async (user) => {
 
     user_data.subjects = await user.getSubjects(
         {       
-            attributes: ['name', 'colour', 'start_date', 'end_date'],   
+            attributes: ['name', 'colour', 'start_date', 'end_date'],
+            order: [
+                ['name', 'ASC'],
+            ],   
             include: [
                 {
                     association: 'classes',
